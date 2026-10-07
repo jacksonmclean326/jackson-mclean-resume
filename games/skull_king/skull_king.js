@@ -234,3 +234,15 @@ function display_winners() {
     }
   }
 }
+
+function undo_round() {
+  if (ROUND === 1) return;
+  for (const player of PLAYERS) {
+    player.rounds.pop();
+  }
+  if (--ROUND === 10) {
+    SECTION_THREE.classList.add("hidden");
+    SECTION_TWO.classList.remove("hidden");
+  }
+  reRender_rows();
+}
