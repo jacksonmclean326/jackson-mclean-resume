@@ -30,35 +30,74 @@ class Player {
   }
 }
 
-const NUMBERS = ["two", "three", "four", "five", "six", "seven", "eight"];
+const NUMBERS = new Map([
+  ["two", 2],
+  ["three", 3],
+  ["four", 4],
+  ["five", 5],
+  ["six", 6],
+  ["seven", 7],
+  ["eight", 8],
+]);
 const ROUND_HEADER = document.getElementById("round");
 const START_ERROR = document.getElementById("start-error");
 const SECTION_ONE = document.getElementById("stage-one");
 const SECTION_TWO = document.getElementById("stage-two");
 const SECTION_THREE = document.getElementById("stage-three");
-let players = [];
+let PLAYERS = [];
 let ROUND = 0;
 let NUM_PLAYERS = 0;
+
+on_reload();
+
+function on_reload() {
+  const round = localStorage.getItem("round");
+  const players = localStorage.getItem("players");
+  if (round && players) {
+    ROUND = Number(round);
+    const savedPlayers = JSON.parse(players);
+    PLAYERS = savedPlayers.map((savedPlayer) => {
+      const restoredPlayer = new Player(savedPlayer.name);
+      restoredPlayer.total_score = savedPlayer.total_score;
+      restoredPlayer.rounds = savedPlayer.rounds;
+      return restoredPlayer;
+    });
+    NUM_PLAYERS = PLAYERS.length;
+  }
+
+  if (ROUND > 10) {
+    SECTION_ONE.classList.add("hidden");
+    SECTION_THREE.classList.remove("hidden");
+    display_winners();
+  } else if (ROUND > 0) {
+    for (const [i, player] of PLAYERS.entries()) {
+      add_row(player, i);
+      SECTION_ONE.classList.add("hidden");
+      SECTION_TWO.classList.remove("hidden");
+      ROUND_HEADER.textContent = `ROUND ${ROUND}`;
+    }
+    reRender_rows();
+  }
+}
 
 function start_game() {
   const num_players_string = document.getElementById("num-players-input").value;
   NUM_PLAYERS = Number(num_players_string);
-  if (isNaN(NUM_PLAYERS)) {
-    for (let i = 0; i < NUMBERS.length; i++) {
-      if (NUMBERS[i] === NUM_PLAYERS_string.toLowerCase()) {
-        NUM_PLAYERS = i + 2;
-        break;
-      }
+  if (isNaN(NUM_PLAYERS) || NUM_PLAYERS <= 1 || NUM_PLAYERS > 8) {
+    const num = NUMBERS.get(num_players_string.toLowerCase());
+
+    if (num) {
+      NUM_PLAYERS = num;
+    } else {
+      START_ERROR.textContent = "Please enter a valid number";
+      return;
     }
   }
-  if (isNaN(NUM_PLAYERS) || NUM_PLAYERS <= 1 || NUM_PLAYERS > 8) {
-    START_ERROR.textContent = "Please enter a valid number";
-  } else {
-    START_ERROR.textContent = "";
-    get_names();
-    document.getElementById("num_players").classList.add("hidden");
-    document.getElementById("names").classList.remove("hidden");
-  }
+
+  START_ERROR.textContent = "";
+  get_names();
+  document.getElementById("num_players").classList.add("hidden");
+  document.getElementById("names").classList.remove("hidden");
 }
 
 function create_players() {
@@ -66,13 +105,15 @@ function create_players() {
     const name =
       document.getElementById(`name-${i}`).value.trim() || `player ${i + 1}`;
     const player = new Player(name);
-    players.push(player);
+    PLAYERS.push(player);
     add_row(player, i);
   }
   SECTION_ONE.classList.add("hidden");
   SECTION_TWO.classList.remove("hidden");
   ROUND = 1;
   ROUND_HEADER.textContent = `ROUND ${ROUND}`;
+  localStorage.setItem("round", ROUND);
+  localStorage.setItem("players", JSON.stringify(PLAYERS));
 }
 
 function get_names() {
@@ -138,7 +179,7 @@ function add_row(player, num) {
 
 function finish_round() {
   for (let i = 0; i < NUM_PLAYERS; i++) {
-    const player = players[i];
+    const player = PLAYERS[i];
     player.rounds.at(-1).bid = Number(
       document.getElementById(`bid-${i}`).value,
     );
@@ -160,11 +201,13 @@ function finish_round() {
     SECTION_THREE.classList.remove("hidden");
     display_winners();
   }
+  localStorage.setItem("round", ROUND);
+  localStorage.setItem("players", JSON.stringify(PLAYERS));
 }
 
 function reRender_rows() {
   for (let i = 0; i < NUM_PLAYERS; i++) {
-    const player = players[i];
+    const player = PLAYERS[i];
     const bid = document.getElementById(`bid-${i}`);
     bid.value = player.rounds.at(-1).bid;
     const won = document.getElementById(`won-${i}`);
@@ -177,7 +220,7 @@ function reRender_rows() {
 }
 
 function display_winners() {
-  const winners = [...players].sort((a, b) => b.total_score - a.total_score);
+  const winners = [...PLAYERS].sort((a, b) => b.total_score - a.total_score);
 
   for (const [i, winner] of winners.entries()) {
     if (i < 3) {
