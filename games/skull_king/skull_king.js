@@ -111,7 +111,7 @@ function create_players() {
   SECTION_ONE.classList.add("hidden");
   SECTION_TWO.classList.remove("hidden");
   ROUND = 1;
-  ROUND_HEADER.textContent = `ROUND ${ROUND}`;
+  ROUND_HEADER.textContent = `Round ${ROUND}`;
   localStorage.setItem("round", ROUND);
   localStorage.setItem("players", JSON.stringify(PLAYERS));
 }
@@ -244,5 +244,19 @@ function undo_round() {
     SECTION_THREE.classList.add("hidden");
     SECTION_TWO.classList.remove("hidden");
   }
+  ROUND_HEADER.textContent = `Round ${ROUND}`;
+  localStorage.setItem("round", ROUND);
+  localStorage.setItem("players", JSON.stringify(PLAYERS));
   reRender_rows();
+}
+
+function reset() {
+  localStorage.removeItem("round");
+  localStorage.removeItem("players");
+  SECTION_ONE.classList.remove("hidden");
+  SECTION_THREE.classList.add("hidden");
+  SECTION_TWO.classList.add("hidden");
+  ROUND = 0;
+  NUM_PLAYERS = 0;
+  PLAYERS = [];
 }
