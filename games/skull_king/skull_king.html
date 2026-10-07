@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="skull_king.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <a href="../../projects.html">&larr; back</a>
+    </header>
+    <main>
+      <section id="stage-one">
+        <h1>Welcome to the Skull King Calculator</h1>
+        <div class="box" id="num_players">
+          <h2>How many players are there? (2-8)</h2>
+          <label for="num-players-input"
+            ># of Players:
+            <input id="num-players-input" />
+          </label>
+          <button id="start" onclick="start_game()">Enter</button>
+        </div>
+        <div class="box hidden" id="names"></div>
+        <p id="start-error" class="error"></p>
+      </section>
+      <section id="stage-two" class="hidden">
+        <h1 id="round"></h1>
+        <table id="table">
+          <!-- Header Row -->
+          <tr>
+            <th>Player</th>
+            <th>Round Info</th>
+            <th>Score</th>
+          </tr>
+        </table>
+        <button id="finish-round" onclick="finish_round()">
+          Finalize Round
+        </button>
+      </section>
+      <section id="stage-three" class="hidden">
+        <div class="podium" aria-label="Top three winners">
+          <div class="podium-place">
+            <h2 id="winner-3" class="podium-name"></h2>
+            <div class="podium-platform podium-platform--third"></div>
+          </div>
+          <div class="podium-place">
+            <h2 id="winner-1" class="podium-name"></h2>
+            <div class="podium-platform podium-platform--first"></div>
+          </div>
+          <div class="podium-place">
+            <h2 id="winner-2" class="podium-name"></h2>
+            <div class="podium-platform podium-platform--second"></div>
+          </div>
+        </div>
+        <ol id="other-winners" start="4"></ol>
+      </section>
+    </main>
+    <script src="skull_king.js"></script>
+  </body>
+</html>
