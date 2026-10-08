@@ -103,6 +103,7 @@ function start_game() {
 
   START_ERROR.textContent = "";
   get_names();
+  document.getElementById("num-players-input").value = "";
   document.getElementById("num_players").classList.add("hidden");
   document.getElementById("names").classList.remove("hidden");
 }
@@ -258,6 +259,10 @@ function undo_round() {
 }
 
 function reset() {
+  const table = document.getElementById("table");
+  table.querySelectorAll("tr:not(:first-child)").forEach((row) => row.remove());
+  document.getElementById("names").replaceChildren();
+
   localStorage.removeItem("round");
   localStorage.removeItem("players");
   SECTION_ONE.classList.remove("hidden");
