@@ -122,8 +122,40 @@ h2 {
   cursor: pointer;
 }
 
-.hidden {
-  display: none;
+.confirmation-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(23, 43, 61, 0.7);
+}
+
+.confirmation-card {
+  width: min(100%, 30rem);
+  padding: 1.5rem;
+  border: 3px solid #172b3d;
+  background: #f6edda;
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.3);
+  color: #172b3d;
+  text-align: center;
+}
+
+.confirmation-card h2 {
+  margin-top: 0;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.confirmation-actions button {
+  min-width: 7rem;
 }
 
 .error {
@@ -304,4 +336,8 @@ th {
   .podium-platform--third {
     height: 3.5rem;
   }
+}
+
+.hidden {
+  display: none;
 }

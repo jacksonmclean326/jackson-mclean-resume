@@ -186,6 +186,31 @@ function add_row(player, num) {
 }
 
 function finish_round() {
+  let total_won = 0;
+  for (let i = 0; i < NUM_PLAYERS; i++) {
+    total_won += Number(document.getElementById(`won-${i}`).value);
+  }
+
+  if (total_won > ROUND || total_won < ROUND - 1) {
+    document.getElementById("finalize-confirmation-message").textContent =
+      "The total amount of winners is not consistent with the round. Are you sure all values are input correctly?";
+    document.getElementById("finalize-confirmation").classList.remove("hidden");
+    return;
+  }
+
+  complete_round();
+}
+
+function continue_finalize_round() {
+  document.getElementById("finalize-confirmation").classList.add("hidden");
+  complete_round();
+}
+
+function cancel_finalize_round() {
+  document.getElementById("finalize-confirmation").classList.add("hidden");
+}
+
+function complete_round() {
   for (let i = 0; i < NUM_PLAYERS; i++) {
     const player = PLAYERS[i];
     player.rounds.at(-1).bid = Number(
@@ -197,9 +222,9 @@ function finish_round() {
     player.rounds.at(-1).bonus = Number(
       document.getElementById(`bonus-${i}`).value,
     );
-
     player.calculate_score();
   }
+
   ROUND++;
   if (ROUND <= 10) {
     reRender_rows();
@@ -234,10 +259,10 @@ function display_winners() {
     if (i < 3) {
       const winnerLabel = document.getElementById(`winner-${i + 1}`);
 
-      winnerLabel.textContent = `${i + 1}. ${winner.name}`;
+      winnerLabel.textContent = `${i + 1}. ${winner.name} : ${winner.total_score}`;
     } else {
       const list = document.createElement("li");
-      list.textContent = winner.name;
+      list.textContent = `${winner.name} : ${winner.total_score}`;
       document.getElementById("other-winners").appendChild(list);
     }
   }
@@ -259,17 +284,27 @@ function undo_round() {
 }
 
 function reset() {
+  // remove all dynamically added html related to players
   const table = document.getElementById("table");
   table.querySelectorAll("tr:not(:first-child)").forEach((row) => row.remove());
   document.getElementById("names").replaceChildren();
+  document.getElementById("other-winners").replaceChildren();
+  ["winner-1", "winner-2", "winner-3"].forEach((id) => {
+    document.getElementById(id).textContent = "";
+  });
 
+  // clear storage
   localStorage.removeItem("round");
   localStorage.removeItem("players");
+
+  // reset to start page
   SECTION_ONE.classList.remove("hidden");
   document.getElementById("num_players").classList.remove("hidden");
   document.getElementById("names").classList.add("hidden");
   SECTION_THREE.classList.add("hidden");
   SECTION_TWO.classList.add("hidden");
+
+  // reset global variables
   ROUND = 0;
   NUM_PLAYERS = 0;
   PLAYERS = [];

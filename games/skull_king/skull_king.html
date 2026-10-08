@@ -60,6 +60,26 @@
         <ol id="other-winners" start="4"></ol>
       </section>
     </main>
+    <div
+      id="finalize-confirmation"
+      class="confirmation-modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="finalize-confirmation-title"
+    >
+      <div class="confirmation-card">
+        <h2 id="finalize-confirmation-title">Confirm Finalize Round</h2>
+        <p id="finalize-confirmation-message"></p>
+        <div class="confirmation-actions">
+          <button type="button" onclick="cancel_finalize_round()">
+            Cancel
+          </button>
+          <button type="button" onclick="continue_finalize_round()">
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
     <footer class="ocean-footer">
       <svg
         class="ocean-wave"
