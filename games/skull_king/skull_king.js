@@ -6,7 +6,9 @@ class Player {
   constructor(name) {
     this.name = name;
     this.total_score = 0;
-    this.rounds = [{ bid: 0, won: 0, bonus: 0, score: this.total_score }];
+    this.rounds = [
+      { bid: null, won: null, bonus: null, score: this.total_score },
+    ];
   }
 
   calculate_score() {
@@ -25,7 +27,12 @@ class Player {
       }
     }
     if (ROUND < 10) {
-      this.rounds.push({ bid: 0, won: 0, bonus: 0, score: this.total_score });
+      this.rounds.push({
+        bid: null,
+        won: null,
+        bonus: null,
+        score: this.total_score,
+      });
     }
   }
 }
@@ -254,6 +261,8 @@ function reset() {
   localStorage.removeItem("round");
   localStorage.removeItem("players");
   SECTION_ONE.classList.remove("hidden");
+  document.getElementById("num_players").classList.remove("hidden");
+  document.getElementById("names").classList.add("hidden");
   SECTION_THREE.classList.add("hidden");
   SECTION_TWO.classList.add("hidden");
   ROUND = 0;
