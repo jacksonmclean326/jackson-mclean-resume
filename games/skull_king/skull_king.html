@@ -9,6 +9,10 @@
   <body>
     <header>
       <a href="../../projects.html">&larr; back</a>
+      <div class="header-actions">
+        <button type="button" onclick="undo_round()">undo</button>
+        <button type="button" onclick="reset()">reset</button>
+      </div>
     </header>
     <main>
       <section id="stage-one">
@@ -26,8 +30,6 @@
       </section>
       <section id="stage-two" class="hidden">
         <h1 id="round"></h1>
-        <button onclick="undo_round()">undo</button>
-        <button onclick="reset()">reset</button>
         <table id="table">
           <!-- Header Row -->
           <tr>
@@ -41,8 +43,6 @@
         </button>
       </section>
       <section id="stage-three" class="hidden">
-        <button onclick="undo_round()">undo</button>
-        <button onclick="reset()">reset</button>
         <div class="podium" aria-label="Top three winners">
           <div class="podium-place">
             <h2 id="winner-3" class="podium-name"></h2>
